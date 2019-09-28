@@ -20,53 +20,53 @@ public class VolleyService {
     IResult mResultCallback = null;
     Context mContext;
 
-    VolleyService(IResult resultCallback, Context context){
+    VolleyService(IResult resultCallback, Context context) {
         mResultCallback = resultCallback;
         mContext = context;
     }
 
 
-    public void postJsonDataVolley(final String requestType, String url, JSONObject sendObj){
+    public void postJsonDataVolley(final String requestType, String url, JSONObject sendObj) {
         try {
             RequestQueue queue = Volley.newRequestQueue(mContext);
 
-            JsonObjectRequest jsonObj = new JsonObjectRequest(url,sendObj, new Response.Listener<JSONObject>() {
+            JsonObjectRequest jsonObj = new JsonObjectRequest(url, sendObj, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    if(mResultCallback != null)
-                        mResultCallback.notifySuccess(requestType,response , null);
+                    if (mResultCallback != null)
+                        mResultCallback.notifySuccess(requestType, response, null);
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    if(mResultCallback != null)
-                        mResultCallback.notifyError(requestType,error);
+                    if (mResultCallback != null)
+                        mResultCallback.notifyError(requestType, error);
                 }
             });
 
             queue.add(jsonObj);
 
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
     }
 
-    public void getJsonObjectDataVolley(final String requestType, String url){
+    public void getJsonObjectDataVolley(final String requestType, String url) {
         RequestQueue queue = Volley.newRequestQueue(mContext);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        if(mResultCallback != null)
-                            mResultCallback.notifySuccess(requestType, response , null);
+                        if (mResultCallback != null)
+                            mResultCallback.notifySuccess(requestType, response, null);
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        if(mResultCallback != null)
+                        if (mResultCallback != null)
                             mResultCallback.notifyError(requestType, error);
                     }
                 });
@@ -75,22 +75,22 @@ public class VolleyService {
 // Access the RequestQueue through your singleton class.
 
     }
-    public void getJsonArrayDataVolley(final String requestType , String url)
-    {
+
+    public void getJsonArrayDataVolley(final String requestType, String url) {
         RequestQueue queue = Volley.newRequestQueue(mContext);
         JsonArrayRequest request = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray jsonArray) {
                         if (mResultCallback != null)
-                            mResultCallback.notifySuccess(requestType,null,jsonArray);
+                            mResultCallback.notifySuccess(requestType, null, jsonArray);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         if (mResultCallback != null)
-                            mResultCallback.notifyError(requestType,volleyError);
+                            mResultCallback.notifyError(requestType, volleyError);
                     }
                 });
 

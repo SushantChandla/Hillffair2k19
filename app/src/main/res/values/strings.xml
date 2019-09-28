@@ -4,9 +4,17 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+
     <string name="baseUrl">http://api.hillffair.com</string>
+
     <string name="caution_text">
         You are required to fill all the details correctly specially the Roll No as your account will be linked through it.\n
         Roll number would be verified at prize distribution. Incorrect roll number will lead to disqualification.
     </string>
+
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
 </resources>

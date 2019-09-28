@@ -21,10 +21,12 @@ import android.widget.Toast;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -55,7 +57,7 @@ public class ProfileMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_main);
-        textView=findViewById(R.id.referral);
+        textView = findViewById(R.id.referral);
 
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,57 +69,16 @@ public class ProfileMain extends AppCompatActivity {
         });
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                String text1 =textView.getText().toString();
+            public void onClick(View v) {
+                String text1 = textView.getText().toString();
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("COPY",text1);
+                ClipData clip = ClipData.newPlainText("COPY", text1);
                 clipboard.setPrimaryClip(clip);
 
-                Toast.makeText(getApplicationContext(), "Referral Copied",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Referral Copied", Toast.LENGTH_SHORT).show();
             }
         });
         initUI();
-
-        try {
-            SharedPreferences prefs = getSharedPreferences("number", Context.MODE_PRIVATE);
-            String check = prefs.getString("name", "nullaaa");
-            if (!check.equals("nullaaa")) {
-                name1.setText(check);
-            }
-            String check1 = prefs.getString("roll number", "nullaaa");
-            if (!check1.equals("nullaaa")) {
-                rollNumber1.setText(check1);
-                byte[] data = check1.getBytes("UTF-8");
-                base64a = Base64.encodeToString(data, Base64.DEFAULT);
-                referral.setText(base64a);
-            } else {
-                referral.setText("No Referral Generated");
-            }
-            String check2 = prefs.getString("Branch", "nullaaa");
-            if (!check2.equals("nullaaa")) {
-                branch1.setText(check2);
-            }
-            String check3 = prefs.getString("Phone", "nullaaa");
-            if (!check3.equals("nullaaa")) {
-                mobile1.setText(check3);
-            }
-//            String check4 = prefs.getString("Score", "0");
-
-            setReferralCount(check1);
-
-            String image = prefs.getString("Image", "https://www.fluigent.com/wp-content/uploads/2018/07/default-avatar-BW.png");
-            if (image.equals("https://www.fluigent.com/wp-content/uploads/2018/07/default-avatar-BW.png")) {
-                Picasso.with(ProfileMain.this).load(image).resize(80, 80).centerCrop().into(profilemain);
-            } else {
-                Bitmap img = decodeBase64(image);
-                Bitmap img1 = getResizedBitmap(img, 300);
-                profilemain.setImageBitmap(img1);
-//            changeProfile();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
@@ -153,19 +114,17 @@ public class ProfileMain extends AppCompatActivity {
     private void setReferralCount(String rno) {
         int count = 0;
 
-        Log.d("url", getResources().getString(R.string.baseUrl) + "getprofile/" + rno);
-        AndroidNetworking.get(getResources().getString(R.string.baseUrl) + "getprofile/" + rno)
+        // Log.d("url", getResources().getString(R.string.baseUrl) + "getprofile/" + rno);
+        AndroidNetworking.get(getResources().getString(R.string.baseUrl) + "/User/" + "12345")
                 .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
+                .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(ProfileMain.this, String.valueOf(response), Toast.LENGTH_SHORT).show();
                         try {
-                            String countTxt = response.getJSONObject(0).getString("score");
-                            int count = Integer.parseInt(countTxt.substring(0,1));
-                            reffaralDone.setText(String.valueOf(--count));
-                            Log.d("count", String.valueOf(count));
-                        }
-                        catch (JSONException e){
+                            name1.setText(String.valueOf(response.getJSONObject("name")));
+
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
@@ -175,8 +134,6 @@ public class ProfileMain extends AppCompatActivity {
                         // Handle error
                     }
                 });
-
-
     }
 
     @Override

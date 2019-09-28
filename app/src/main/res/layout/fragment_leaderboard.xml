@@ -1,0 +1,99 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:paddingTop="126dp">
+
+    <ProgressBar
+        android:id="@+id/loadwall"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:theme="@style/AppTheme1"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/leaderboard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/table"
+        android:layoutAnimation="@anim/layout_animation"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/greenBottom"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@drawable/red_magenta"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/greenBottom"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:fontFamily="@font/ps"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="Points"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:theme="@style/RedHighlight" />
+
+                <TextView
+                    android:id="@+id/referral"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:fontFamily="@font/ps"
+                    android:paddingLeft="16sp"
+                    android:paddingRight="16dp"
+                    android:text="Refferal"
+                    android:textColor="@color/hint"
+                    android:textSize="18sp"
+                    android:theme="@style/RedHighlight" />
+
+                <TextView
+                    android:id="@+id/popular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:fontFamily="@font/ps"
+                    android:paddingLeft="16sp"
+                    android:paddingRight="16dp"
+                    android:text="Popular"
+                    android:textColor="@color/hint"
+                    android:textSize="18sp"
+                    android:theme="@style/RedHighlight" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

@@ -69,18 +69,18 @@ public class coreteam extends Fragment {
 
     public void getData() {
         teamList.clear();
-        teamList.add(new Team("Captaion Marvel", "https://www.hdwallpapersfreedownload.com/uploads/large/super-heroes/captain-marvel-avengers-brie-larson-super-hero-hd-wallpaper.jpg", "Chief"));
-        teamList.add(new Team("Thanos", "https://pre00.deviantart.net/db91/th/pre/i/2017/197/8/0/thanos_wallpaper_16_by_rippenstain-dbghpzw.jpg", "Villan"));
-        teamList.add(new Team("Iron Mam", "https://wallpapersite.com/images/pages/ico_n/15263.jpg", "Hero"));
-        teamAdapter.notifyDataSetChanged();
+//        teamList.add(new Team("Captaion Marvel", "https://www.hdwallpapersfreedownload.com/uploads/large/super-heroes/captain-marvel-avengers-brie-larson-super-hero-hd-wallpaper.jpg", "Chief"));
+//        teamList.add(new Team("Thanos", "https://pre00.deviantart.net/db91/th/pre/i/2017/197/8/0/thanos_wallpaper_16_by_rippenstain-dbghpzw.jpg", "Villan"));
+//        teamList.add(new Team("Iron Mam", "https://wallpapersite.com/images/pages/ico_n/15263.jpg", "Hero"));
+//        teamAdapter.notifyDataSetChanged();
 
         //Initialising
-//        initAndroidNetworkingCallback();
+        initAndroidNetworkingCallback();
         com.androidnetworking.AndroidNetworking.initialize(getActivity());
         com.appteam.hillfair2k19.AndroidNetworking androidNetworking = new com.appteam.hillfair2k19.AndroidNetworking(mResultCallbackAndroidNeworking,getActivity());
 
-//                 GET REQUEST SINGLE JSON OBJECT
-//        androidNetworking.getJsonArrayAndroidNetworking("GetCoreteam",activity.getString(R.string.baseUrl) + "coreteam");
+        //                 GET REQUEST SINGLE JSON OBJECT
+        androidNetworking.getJsonObjectAndroidNetworking("GetCoreteam",activity.getString(R.string.baseUrl) + "/core_team");
 
 
 //        GET REQUEST FOR JSON ARRAY
@@ -96,12 +96,8 @@ public class coreteam extends Fragment {
                 if (response != null)
                 {
                     //JsonObject
-                    Toast.makeText(getActivity(), String.valueOf(response), Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    //JsonArray
                     try {
+                        jsonArray = response.getJSONArray("members");
                         int users = jsonArray.length();
                         for (int i = 0; i < users; i++) {
                             JSONObject json = jsonArray.getJSONObject(i);
@@ -115,7 +111,10 @@ public class coreteam extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(getActivity(), String.valueOf(jsonArray), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), String.valueOf(jsonArray), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    //JsonArray
                 }
             }
 

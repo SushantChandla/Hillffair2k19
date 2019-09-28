@@ -1,6 +1,7 @@
-package com.appteam.hillfair2k19.Activity;
+package com.appteam.hillfair2k19;
 
-import androidx.appcompat.app.AppCompatActivity;
+import
+        androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -13,7 +14,6 @@ import android.view.View;
 import com.appteam.adapters.ContributorsAdaptor;
 import com.appteam.hillfair2k19.FaceSmash;
 import com.appteam.hillfair2k19.R;
-import com.appteam.hillfair2k19.fragments.SponsersFragment;
 import com.appteam.hillfair2k19.model.contributorsItem;
 
 import java.util.ArrayList;
@@ -57,17 +57,16 @@ public class ContributorsActivity extends AppCompatActivity {
         //contributorsItems.add(new contributorsItem("Narendra Dodwaria", BASE_URL + "narendra36.png", BASE_URL + "narendra36"));
 
         //4th Year
-        contributorsItems.add(new contributorsItem("Aditya Arora", BASE_URL + "adi23arora.png", BASE_URL + "adi23arora"));
-        contributorsItems.add(new contributorsItem("B Jatin Rao", BASE_URL + "Jatin0312.png", BASE_URL + "Jatin0312"));
-        contributorsItems.add(new contributorsItem("Nitin Sharma", BASE_URL + "iamNitin16.png", BASE_URL + "iamNitin16"));
-        contributorsItems.add(new contributorsItem("Suraj Negi", BASE_URL + "Akatsuki06.png", BASE_URL + "Akatsuki06"));
+//        contributorsItems.add(new contributorsItem("Aditya Arora", BASE_URL + "adi23arora.png", BASE_URL + "adi23arora"));
+//        contributorsItems.add(new contributorsItem("B Jatin Rao", BASE_URL + "Jatin0312.png", BASE_URL + "Jatin0312"));
+//        contributorsItems.add(new contributorsItem("Nitin Sharma", BASE_URL + "iamNitin16.png", BASE_URL + "iamNitin16"));
+//        contributorsItems.add(new contributorsItem("Suraj Negi", BASE_URL + "Akatsuki06.png", BASE_URL + "Akatsuki06"));
 
         //4th Year
-        contributorsItems.add(new contributorsItem("Bharat Shah", BASE_URL + "bharatshah1498.png", BASE_URL + "bharatshah1498"));
-        contributorsItems.add(new contributorsItem("Kartik Saxena", BASE_URL + "SaxenaKartik.png", BASE_URL + "SaxenaKartik"));
         contributorsItems.add(new contributorsItem("Muskan Jhunjhunwalla", BASE_URL + "musukeshu.png", BASE_URL + "musukeshu"));
+        contributorsItems.add(new contributorsItem("Kartik Saxena", BASE_URL + "SaxenaKartik.png", BASE_URL + "SaxenaKartik"));
         contributorsItems.add(new contributorsItem("Anubhaw Bhalotia", BASE_URL + "anubhawbhalotia.png", BASE_URL + "anubhawbhalotia"));
-        contributorsItems.add(new contributorsItem("Kaushal Kishore", BASE_URL + "kaushal16124.png", BASE_URL + "kaushal16124"));
+        contributorsItems.add(new contributorsItem("Bharat Shah", BASE_URL + "bharatshah1498.png", BASE_URL + "bharatshah1498"));
 
         //3rd Year
         contributorsItems.add(new contributorsItem("Abhinav Lamba", BASE_URL + "Abhinavlamba.png", BASE_URL + "Abhinavlamba"));

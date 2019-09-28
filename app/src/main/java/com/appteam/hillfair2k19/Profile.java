@@ -24,6 +24,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
@@ -47,6 +53,7 @@ import org.json.JSONArray;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +68,7 @@ public class Profile extends AppCompatActivity {
     String pass = "";
     private byte[] byteArray;
     private EditText studentName, rollNumber, branch, contactNumber, referral;
-    private String Name, base64a, base64b, RollNumber, Branch, referal, ContactNumber, imgUrl;
+    private String Name, base64a, base64b, RollNumber, Branch, referal, ContactNumber, imgUrl, gender;
     private CircleImageView profilePicture;
     private TextView buttonLoadImage, save;
     private Bitmap bmp, img;
@@ -108,6 +115,7 @@ public class Profile extends AppCompatActivity {
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
+
     private boolean hasPermissions(Context context, String... permissions) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
             for (String permission : permissions) {
@@ -118,6 +126,7 @@ public class Profile extends AppCompatActivity {
         }
         return true;
     }
+
     FirebaseVisionFaceDetectorOptions highAccuracyOpts =
             new FirebaseVisionFaceDetectorOptions.Builder()
                     .setPerformanceMode(FirebaseVisionFaceDetectorOptions.FAST)
@@ -149,7 +158,7 @@ public class Profile extends AppCompatActivity {
     }
 
     public void choosePhotoFromGallery() {
-        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         if (galleryIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(galleryIntent, GALLERY);
@@ -179,16 +188,16 @@ public class Profile extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(Profile.this, "Failed!", Toast.LENGTH_SHORT).show();
-                    }
                 }
-            } else if (requestCode == CAMERA) {
-                selectedImage= (Bitmap) data.getExtras().get("data");
-                isHuman(selectedImage);
             }
-
+        } else if (requestCode == CAMERA) {
+            selectedImage = (Bitmap) data.getExtras().get("data");
+            isHuman(selectedImage);
         }
 
-    public void isHuman(final Bitmap thumbnail){
+    }
+
+    public void isHuman(final Bitmap thumbnail) {
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(thumbnail);
         FirebaseVisionFaceDetector detector = FirebaseVision.getInstance()
                 .getVisionFaceDetector(highAccuracyOpts);
@@ -220,6 +229,7 @@ public class Profile extends AppCompatActivity {
                                                 pass = encodeTobase64(img);
                                                 profilePicture = findViewById(R.id.profilePicture);
                                                 profilePicture.setImageBitmap(img);
+                                                buttonLoadImage.setVisibility(View.INVISIBLE);
                                                 Toast.makeText(Profile.this, "Image Saved!", Toast.LENGTH_SHORT).show();
                                                 counter = 1;
                                             }
@@ -256,33 +266,35 @@ public class Profile extends AppCompatActivity {
     }
 
     public void initUI() {
-        SharedPreferences prefs = getSharedPreferences("number", Context.MODE_PRIVATE);
-        String check = prefs.getString("name", "gsbs");
-        SharedPreferences.Editor editor = prefs.edit();
-        String open = prefs.getString("Profile Dialog","null");
+//        SharedPreferences prefs = getSharedPreferences("number", Context.MODE_PRIVATE);
+//        String check = prefs.getString("name", "gsbs");
+//        SharedPreferences.Editor editor = prefs.edit();
+//        String open = prefs.getString("Profile Dialog", "null");
         CautionDialog cautionDialog = new CautionDialog(Profile.this);
 
-            if (open.equals("1")) {
-                cautionDialog.show();
-                editor.putString("Profile Dialog", "0");
-                editor.apply();
-            }
-            if (!check.equals("gsbs")) {
-            cautionDialog.dismiss();
-            startActivity(new Intent(Profile.this, MainActivity.class));
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            finish();
-        }
+//        if (open.equals("1")) {
+//            cautionDialog.show();
+//            editor.putString("Profile Dialog", "0");
+//            editor.apply();
+//        }
+//        if (!check.equals("gsbs")) {
+////            cautionDialog.dismiss();
+////            startActivity(new Intent(Profile.this, MainActivity.class));
+//            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+//            finish();
+//        }
 
         studentName = findViewById(R.id.studentName);
         rollNumber = findViewById(R.id.rollNumber);
         referral = findViewById(R.id.referal);
         branch = findViewById(R.id.branch);
+        if (findViewById(R.id.male).isSelected()) gender = "Male";
+        else if (findViewById(R.id.female).isSelected()) gender = "Female";
         contactNumber = findViewById(R.id.contactNumber);
-        final SharedPreferences sharedPreferences = getSharedPreferences("number", Context.MODE_PRIVATE);
-//        contactNumber.setText(sharedPreferences.getString("numberMobile", "None").replace("+91 ", ""));
-        contactNumber.setText(sharedPreferences.getString("Phone", "None"));
-        contactNumber.setEnabled(false);
+//        final SharedPreferences sharedPreferences = getSharedPreferences("number", Context.MODE_PRIVATE);
+////        contactNumber.setText(sharedPreferences.getString("numberMobile", "None").replace("+91 ", ""));
+//        contactNumber.setText(sharedPreferences.getString("Phone", "None"));
+//        contactNumber.setEnabled(false);
         save = findViewById(R.id.save);
         save.setOnClickListener(new View.OnClickListener() {
 
@@ -300,31 +312,33 @@ public class Profile extends AppCompatActivity {
         Branch = String.valueOf(branch.getText());
         referal = String.valueOf(referral.getText());
         ContactNumber = contactNumber.getText().toString();
-        Log.d("roll",RollNumber);
-        if (Name.length() == 0 || RollNumber.length() == 0 || Branch.length() == 0 || ContactNumber.length() == 0) {
+        Log.d("roll", RollNumber);
+        if (ContactNumber == null)
+            ContactNumber = "7587524626";
+        if (Name.length() == 0) {
             Toast.makeText(Profile.this, "Seems You Didn`t enter all the details", Toast.LENGTH_SHORT).show();
         } else {
             final SharedPreferences sharedPreferences = getSharedPreferences("number", Context.MODE_PRIVATE);
             final SharedPreferences.Editor editor = sharedPreferences.edit();
 
+            pass = "qqqq";
             if (pass == "") {
                 Toast.makeText(Profile.this, "Please select profile picture", Toast.LENGTH_SHORT).show();
-            } else if (Name == "" || RollNumber == "" || Branch == "" || ContactNumber == "" || pass == "" ) {
+            } else if (Name == "" || RollNumber == "" || Branch == "" || ContactNumber == "" || pass == "" || gender == "") {
                 Toast.makeText(Profile.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-            }
-            else if(RollNumber.equals("0")){
+            } else if (RollNumber.equals("0")) {
                 Toast.makeText(Profile.this, "Please Enter Valid Roll No", Toast.LENGTH_SHORT).show();
-            }
-            else {
+            } else {
                 editor.putString("name", Name);
                 editor.putString("roll number", RollNumber);
                 editor.putString("Branch", Branch);
                 editor.putString("Phone", ContactNumber);
                 editor.putString("Image", pass);
+                editor.putString("Gender", gender);
                 editor.commit();
-                progress.setVisibility(View.VISIBLE);
+//                progress.setVisibility(View.VISIBLE);
                 String requestId = MediaManager.get().upload(byteArray)
-                        .unsigned("kifap7u6")
+                        .unsigned("xf7gsy1r")
                         .callback(new UploadCallback() {
                             @Override
                             public void onStart(String requestId) {
@@ -338,18 +352,20 @@ public class Profile extends AppCompatActivity {
                             public void onSuccess(String requestId, Map resultData) {
                                 System.out.println(resultData.get("url"));
                                 imgUrl = String.valueOf(resultData.get("url"));
+                                Toast.makeText(Profile.this, imgUrl + "ABCD", Toast.LENGTH_SHORT).show();
                                 post(ContactNumber);
-                                startActivity(new Intent(Profile.this, MainActivity.class));
-                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                                editor.putString("ImageURL", String.valueOf(resultData.get("url")));
-                                editor.commit();
-                                finish();
+//                                startActivity(new Intent(Profile.this, MainActivity.class));
+//                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+//                                editor.putString("ImageURL", String.valueOf(resultData.get("url")));
+//                                editor.commit();
+//                                finish();
                             }
 
                             @Override
                             public void onError(String requestId, ErrorInfo error) {
+                                Toast.makeText(Profile.this, "Error", Toast.LENGTH_SHORT).show();
+                                Log.v("ErrorCloud",String.valueOf(error));
                             }
-
                             @Override
                             public void onReschedule(String requestId, ErrorInfo error) {
                             }
@@ -362,7 +378,7 @@ public class Profile extends AppCompatActivity {
 
     public void post(String ContactNumber) {
         try {
-//            byte[] data = referal.getBytes("UTF-8");
+            // byte[] data = referal.getBytes("UTF-8");
             base64a = referal;
             if (base64a.equals(""))
                 base64a = "0";
@@ -372,21 +388,53 @@ public class Profile extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        System.out.print(getString(R.string.baseUrl) + "postprofile/" + Name + "/" + RollNumber + "/" + ContactNumber);//22
-        AndroidNetworking.get(getString(R.string.baseUrl) + "postprofile/" + Name + "/" + RollNumber + "/" + ContactNumber + "/" + base64a + "/" + base64b)
-                .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        progress.setVisibility(View.GONE);
-                        // do anything with response
-                    }
+        // System.out.print(getString(R.string.baseUrl) + "User/" + Name + "/" + RollNumber + "/" + ContactNumber);//22
+//        AndroidNetworking.get(getString(R.string.baseUrl) + "/User/")
+//                .build()
+//                .getAsJSONArray(new JSONArrayRequestListener() {
+//                    @Override
+//                    public void onResponse(JSONArray response) {
+//                        progress.setVisibility(View.GONE);
+//                        // do anything with response
+//                    }
+//
+//                    @Override
+//                    public void onError(ANError error) {
+//                        // handle error
+//                    }
+//                });
+        RequestQueue queue = Volley.newRequestQueue(this);
 
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, getString(R.string.baseUrl) + "/User/",
+                new Response.Listener<String>() {
                     @Override
-                    public void onError(ANError error) {
-                        // handle error
+                    public void onResponse(String response) {
+                        Toast.makeText(Profile.this,response,Toast.LENGTH_LONG).show();
                     }
-                });
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(Profile.this,error.toString(),Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Firebaseid","12345");
+                params.put("roll number", "abcd");
+                params.put("branch","csed");
+                params.put("mobile","8888888888");
+                params.put("referral_friend","1234");
+                params.put("name","qq");
+                params.put("gender","ww");
+                params.put("image_url",imgUrl);
+                return params;
+            }
+
+        };
+        queue.add(stringRequest);
+
     }
 
     @Override
