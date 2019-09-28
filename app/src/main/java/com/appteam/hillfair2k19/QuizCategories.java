@@ -62,9 +62,9 @@ public class QuizCategories extends AppCompatActivity {
             Science_layout.setVisibility(View.GONE);
         }
 
-        if(categoriesdata.getBoolean("Anime",false)){
+        //if(categoriesdata.getBoolean("Anime",false)){
             Anime_layout.setVisibility(View.GONE);
-        }
+       // }
         if(categoriesdata.getBoolean("Movies",false)){
             Movies_layout.setVisibility(View.GONE);
         }
